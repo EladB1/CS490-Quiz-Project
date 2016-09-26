@@ -1,4 +1,5 @@
 <?php
+  include 'singleton.class.php';
   class user{ //May help to make this abstract then inherit student and admin from it
     private $UCID;
     private $passwd;
