@@ -1,0 +1,3 @@
+http://lornajane.net/posts/2011/posting-json-data-with-php-curl
+http://www.slideshare.net/lornajane/web-services-9591728
+https://www.sitepoint.com/the-mvc-pattern-and-php-1/
