@@ -36,7 +36,7 @@
     }
     public function logout(){
       session_start();
-      session_unset($_SESSION['UCID'];
+      session_unset($_SESSION['UCID']);
       header('web.njit.edu/~dt242'); //redirect to the login page
     }
   }
