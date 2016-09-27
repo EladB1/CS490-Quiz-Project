@@ -1,1 +1,15 @@
+CREATE TABLE CS490_Users(
+  /*userNum INT AUTO_INCREMENT PRIMARY KEY,*/ /*may make the table more efficient than using UserID as the Primary Key*/
+  UserID VARCHAR(10),
+  Password VARCHAR(24) NOT NULL, /*Using junk passwords so no need to store hashes*/
+  Role ENUM('Admin', 'Student') NOT NULL,
+  PRIMARY KEY(UserID)
+)ENGINE=MyISAM; /*may need to change the engine to InnoDB*/
+
+INSERT INTO CS490_Users VALUES('eb86', 'l33t-h@ck$', 'Admin');
+INSERT INTO CS490_Users VALUES('dt242','hello, world!', 'Admin');
+INSERT INTO CS490_Users VALUES('dyp6', 'quiz-project', 'Admin');
+INSERT INTO CS490_Users VALUES('wx411', 'whoisthis?', 'Student');
+INSERT INTO CS490_Users VALUES('xz312', 'not-a-person', 'Student');
+
 
