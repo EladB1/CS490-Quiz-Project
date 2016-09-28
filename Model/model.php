@@ -53,7 +53,7 @@
           $results['loginAttempt'] = false; //bad login attempt
         }
         else{
-          $results['Role'] = $queryResults['Role'];
+          $results['Role'] = $queryResults[0]['Role'];
           $results['loginAttempt'] = true;
         }
         $JSON = json_encode($results);
@@ -62,6 +62,11 @@
       catch(PDOException $excp){
         return 'Database error: ' . $excp->getMessage() . "\n";
       }
+    }
+    public function login(){
+	  $message = $this->receiveJSON();
+	  $array = $message;
+	  return $this->authenticate($array['username'], $array['password']);
     }
   }
 ?>
