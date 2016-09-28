@@ -13,11 +13,26 @@
 
       }
     }
-    public function sendJSON($encodedMessage, $url){
+     public function sendJSON($encodedMessage){
+      $sendCurl = curl_init();
+      curl_setopt($sendCurl, CURLOPT_URL, 'https://web.njit.edu/~dyp6/CS490/MidEndLogin.php');
+      curl_setopt($sendCurl, CURLOPT_POST, TRUE);
+      curl_setopt($sendCurl, CURLOPT_POSTFIELDS, $encodedMessage);
+      $http_header = array('Accept: application/json', 'Content-Type: application/json');
+      curl_setopt($sendCurl, CURLOPT_HTTPHEADER, $http_header);
 
+      $message = curl_exec($sendCurl);
+      curl_close($sendCurl);
     }
-    public function receiveJSON($encodedMessage, $url){
-      $arr = json_decode($encodedMessage);
+    public function receiveJSON(){
+	  $recv = curl_init();
+	  curl_setopt($recv, CURLOPT_URL, 'https://web.njit.edu/~dyp6/CS490/MidEndLogin.php');
+      curl_setopt($recv, CURLOPT_POST, TRUE);
+      curl_setopt($recv, CURLOPT_RETURNTRANSFER, TRUE);
+	  $message = curl_exec($recv);
+      $arr = json_decode($message);
+	  curl_close($recv);
+	  return $arr;
     }
   }
   class user extends model{
