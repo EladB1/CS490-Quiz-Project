@@ -29,14 +29,16 @@
         $exec->bindParam(':username', $userName);
         $exec->bindParam(':password', $password);
         $exec->execute();
-        $results = $exec->fetchAll(PDO::FETCH_ASSOC); //get an associative array from the result
-        if(empty($results)){ //nothing was returned by the database
-          $results['UserID'] = $UserID;
-          $results['Password'] = ' ';
+        $queryResult = $exec->fetchAll(PDO::FETCH_ASSOC); //get an associative array from the result
+        $results = array();
+        $results['UserID'] = $userName;
+        $results['Password'] = $password;
+        if(empty($queryResult)){ //nothing was returned by the database
           $results['Role'] = ' ';
           $results['loginAttempt'] = false; //bad login attempt
         }
         else{
+          $results['Role'] = $queryResults['Role'];
           $results['loginAttempt'] = true;
         }
         $JSON = json_encode($results);
