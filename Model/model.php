@@ -27,10 +27,10 @@
     public function receiveJSON(){
 	  $recv = curl_init();
 	  curl_setopt($recv, CURLOPT_URL, 'https://web.njit.edu/~dyp6/CS490/MidEndLogin.php');
-      curl_setopt($recv, CURLOPT_POST, TRUE);
-      curl_setopt($recv, CURLOPT_RETURNTRANSFER, TRUE);
+          curl_setopt($recv, CURLOPT_POST, TRUE);
+          curl_setopt($recv, CURLOPT_RETURNTRANSFER, TRUE);
 	  $message = curl_exec($recv);
-      $arr = json_decode($message);
+          $arr = json_decode($message);
 	  curl_close($recv);
 	  return $arr;
     }
