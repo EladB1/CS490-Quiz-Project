@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<link rel="stylesheet" href="styles.css">
+</head>
+
+<script type="text/javascript">
+        function validateCode()
+        {
+                 var user = document.forms["loginForm"]["username"].value;
+                 var pass = document.forms["loginForm"]["password"].value;
+        
+                 if( /[^a-zA-Z0-9]/.test(user) ) //ensures username is alphanumberic
+                 {
+                     alert("Username can only contain letters and numbers!");
+                     return false;
+                 }
+                 else if ( /[^a-zA-Z0-9]/.test(pass) ) //ensures password is alphanumeric
+                 {
+                     alert("Password can only contain letters and numbers!");
+                     return false;                
+                 }
+                 else
+                     return true;
+        }
+
+</script>
+
+       <body style="background-color: Bisque ;">
+
+
+             <p style="text-align:center;font-size:200%;"> Welcome! Please login: </p>
+
+	           <form name="loginForm" onsubmit="return validateCode()" 
+             action ="security.php" method="post">
+		               <fieldset>
+
+			                       <b>Username</b> <br>
+			                       <input type="text" name="username" required> <br>                              
+                                                                                          
+			                       <b>Password</b> <br>
+			                       <input type="text" name="password" required> <br><br>
+
+			                       <input type="submit" value="Submit">
+
+
+		               </fieldset>
+
+	           </form>
+
+       </body>
+</html>
