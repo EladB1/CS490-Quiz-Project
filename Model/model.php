@@ -17,7 +17,7 @@ class user extends model{
     public function authenticate($userName, $password){
       try{
         $PDO_Obj = $this->connectToDB();
-        $query = 'SELECT UserID, Password, Role FROM CS490_Users WHERE UserID = :username AND Password = :password LIMIT 1'; //limit 1 will make it stop after getting result
+        $query = 'SELECT Role FROM CS490_Users WHERE UserID = :username AND Password = :password LIMIT 1'; //limit 1 will make it stop after getting result
 	$exec = $PDO_Obj->prepare($query);
         $exec->bindParam(':username', $userName);
         $exec->bindParam(':password', $password);
