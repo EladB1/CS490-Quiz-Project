@@ -1,4 +1,9 @@
   <?php
+  /*Elad Bergrin*/
+  /*Group Members: 
+    Daniel Thomas
+    Dhruv Patel
+  */
   class model{
     protected $dbHandle;
     public function connectToDB(){
