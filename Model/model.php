@@ -49,7 +49,7 @@ class user extends model{
   /* main */
   $user = new user();
   $arr = $user->login();
-  print_r($arr);
+  print_r($arr); //print the json encoded result so that the middle-end can receive a response to its curl request
   
 ?>
                                                                                                                                       
