@@ -1,3 +1,8 @@
+/*Elad Bergrin*/
+/*Group Members: 
+  Daniel Thomas
+  Dhruv Patel
+*/
 CREATE TABLE CS490_Users(
   /*userNum INT AUTO_INCREMENT PRIMARY KEY,*/ /*may make the table more efficient than using UserID as the Primary Key*/
   UserID VARCHAR(10),
