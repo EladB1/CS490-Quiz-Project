@@ -23,6 +23,7 @@ class user extends model{
         $exec->bindParam(':password', $password);
         $exec->execute();
         $queryResult = $exec->fetchAll(PDO::FETCH_ASSOC); //get an associative array from the result
+	$results = array('UserID' => '', 'Role' => '', 'loginAttempt' => '');
         $results['UserID'] = $userName;
 	if(empty($queryResult)){ //nothing was returned by the database
 	  $results['Role'] = ' ';
