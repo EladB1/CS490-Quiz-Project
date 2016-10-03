@@ -12,7 +12,7 @@ CREATE TABLE CS490_Users(
 )ENGINE=MyISAM; /*may need to change the engine to InnoDB*/
 
 INSERT INTO CS490_Users VALUES('eb86', 'l33t-h@ck$', 'Admin');
-INSERT INTO CS490_Users VALUES('dt242','hello, world!', 'Admin');
+INSERT INTO CS490_Users VALUES('dt242','hello,world!', 'Admin');
 INSERT INTO CS490_Users VALUES('dyp6', 'quiz-project', 'Admin');
 INSERT INTO CS490_Users VALUES('wx411', 'whoisthis?', 'Student');
 INSERT INTO CS490_Users VALUES('xz312', 'not-a-person', 'Student');
