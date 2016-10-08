@@ -1,0 +1,69 @@
+/*Elad Bergrin*/
+/*Group Members:
+  Daniel Thomas
+  Dhruv Patel
+*/
+CREATE TABLE CS490_Users(
+  /*userNum INT AUTO_INCREMENT PRIMARY KEY,*/ /*may make the table more efficient than using UserID as the Primary Key*/
+  UserID VARCHAR(10),
+  Password VARCHAR(24) NOT NULL, /*Using junk passwords so no need to store
+  hashes*/
+  Role ENUM('Admin', 'Student') NOT NULL,
+  PRIMARY KEY(UserID)
+)ENGINE=MyISAM; /* Read-heavy table*/
+
+INSERT INTO CS490_Users VALUES('eb86', 'l33t-h@ck$', 'Admin');
+INSERT INTO CS490_Users VALUES('dt242','hello,world!', 'Admin');
+INSERT INTO CS490_Users VALUES('dyp6', 'quiz-project', 'Admin');
+INSERT INTO CS490_Users VALUES('wx411', 'whoisthis?', 'Student');
+INSERT INTO CS490_Users VALUES('xz312', 'not-a-person', 'Student');
+
+/* Questions, exams, parameters, and answers are most-likely going to be read-heavy and write-heavy so using InnoDB may be better than MyISAM*/
+/*A lot of these use VARCHAR(50) because of uncertainties about length*/
+
+CREATE TABLE Constraints(
+  QuestionID INT,
+  Constraint ENUM('if/else', 'switch', 'file handling', 'for loop', 'while loop')
+  /*others that can be added: OOP, recursion, program structure, number of variables(ex: swap using only two variables), etc.*/
+)ENGINE=InnoDB;
+
+CREATE TABLE Parameters(
+  paramID INT AUTO_INCREMENT PRIMARY KEY,
+  dataType ENUM('int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'),
+  varName VARCHAR(50),
+  QuestionID INT FOREIGN KEY REFERENCES Questions(QuestionID)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
+)ENGINE=InnoDB;
+
+CREATE TABLE Questions(
+  QuestionID INT AUTO_INCREMENT PRIMARY KEY,
+  Text VARCHAR(1024) NOT NULL, /* This can be changed; temporary length used */
+  Points INT,
+  returnType ENUM('none', 'int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'), /*return type of none means void */
+  functionName VARCHAR(50),
+)ENGINE=InnoDB;
+
+CREATE TABLE Exam(
+  ExamID INT AUTO_INCREMENT PRIMARY KEY,
+  ExamName VARCHAR(50),
+  QuestionID INT,
+  examStatus ENUM('Active', 'Inactive'), /*It may be better to make an exam inactive rather than delete it; can be changed later*/
+  adminStatus ENUM('Graded', 'Ungraded'), /*may not need this field or one below it *i/
+  studentStatus ENUM('Attempted', 'Not attempted'),
+  FOREIGN KEY(QuestionID) REFERENCES Questions(QuestionID)
+}ENGINE=InnoDB;
+
+CREATE TABLE Answer(
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  Code VARCHAR(10000), /* Not sure how many characters to store or how code will be stored */
+  FeedBack VARCHAR(5000), /*Same as comment above */
+  UserID INT,
+  QuestionID INT,
+  ExamID, INT,
+  returnType ENUM('none', 'int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'),
+  returnValue VARCHAR(50),
+  FOREIGN KEY(UserID) REFERENCES CS490_Users(UserID),
+  FOREIGN KEY(QuestionID) REFERENCES Questions(QuestionID) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(ExamID) REFERENCES Exam(ExamID) ON UPDATE CASCADE /*ON DELETE CASCADE*/
+)ENGINE=InnoDB;
