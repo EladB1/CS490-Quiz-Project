@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+	<style>
+	ul
+	{
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background-color: black;
+	
+	}
+	
+	li
+	{
+		float: left;
+		border-right: 1px solid white;
+	}
+	
+	li:last-child
+	{
+		border-right: none;
+	}
+	
+	li a
+	{
+		display: block;
+		color: white;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+	}
+	
+	li a:hover:not(.active)
+	{
+		background-color: blue;
+	}
+	.active
+	{
+		background-color: red;
+	}
+	
+	textarea
+	{
+		position: relative;
+		top: 400px;
+		resize: none;
+	}
+	
+	.dropbtn
+	{
+		background-color: green;
+		color: white;
+		padding: 16px;
+		font-size: 16px;
+		border: none;
+		cursor: pointer;
+	}
+	
+	.dropdown
+	{
+		position: relative;
+		display: inline-block;
+		bottom: 100px
+	}
+	
+	.dropdown-content
+	{
+		display: none;
+		position: absolute;
+		background-color: Snow;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	}
+	
+	.dropdown-content a
+	{
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+	}
+	
+	.dropdown-content a:hover {background-color: #f1f1f1} 
+	
+	.dropdown:hover .dropdown-content
+	{
+		display:block;
+	}
+	
+	.dropdown:hover .dropbtn
+	{
+		background-color: Fruit Salad;
+	}
+	
+	body {background-color: Bisque;}
+	
+	.padding
+	{
+		margin-left: 30px;
+	}
+	
+	.paramLabel
+	{
+		padding-right: 20px;
+	}
+	
+	</style>
+	</head>
+	
+	<body>
+	
+	<nav>
+		<ul>
+			<li><a href="teacherAdd.html" class="active">Add Question</a></li>
+			<li><a href="teacherCreate.html">Create Test</a></li>
+		</ul>
+	</nav>
+	
+	<form name="questionForm" action="submitQuestion.php" method="post">
+	
+		<div>
+		<p style="position:relative; top:410px"><b><i>Enter problem description here:</b></i> </p>
+			<textarea name="description" placeholder="Enter some text..." rows="7" cols="50" required></textarea>
+		</div>
+		
+		<br>
+		
+		<div style="position:absolute; top:50px">
+			<p><b><i>Select a return type: </b></i></p>
+			<input type="radio" name="returnType" value="void" checked> Void<br>
+			<input type="radio" name="returnType" value="int"> Int<br>
+			<input type="radio" name="returnType" value="float"> Float<br>
+			<input type="radio" name="returnType" value="double"> Double<br>
+			<input type="radio" name="returnType" value="short"> Short<br>
+			<input type="radio" name="returnType" value="long"> Long<br>
+			<input type="radio" name="returnType" value="char"> Char<br>
+			<input type="radio" name="returnType" value="boolean"> Boolean<br>
+			<input type="radio" name="returnType" value="string"> String<br>
+		</div>
+		
+		
+		
+		<div style="position:relative; top:50px">
+			<b><i>Please enter parameters here (if any):</b></i> <br>
+			
+			<span class="paramLabel"> Param Type:</span>	
+			<span> Param Name: </span>
+			<br>
+			<select name="paramType1" id="firstParamType" onChange="changeTextBox1();">
+				<option value="none">none</option>
+				<option value="int">Int</option>
+				<option value="float">Float</option>
+				<option value="double">Double</option>
+				<option value="short">Short</option>
+				<option value="long">Long</option>
+				<option value="char">Char</option>
+				<option value="boolean">Boolean</option>
+				<option value="string">String</option>
+			</select>
+			<input type="text" name="name1" id="nameBox1" class="padding" disabled>
+			<br>
+			
+			<script>
+				function changeTextBox1()
+				{
+					
+					var str = document.getElementById("firstParamType").value;
+					
+					if(str != "none")
+					{
+						document.getElementById("nameBox1").disabled = false;
+			
+					}
+					else
+					{
+						document.getElementById("nameBox1").disabled = true;
+					}
+					
+				}
+			
+		
+			</script>
+			
+			<span class="paramLabel"> Param Type:</span>	
+			<span> Param Name: </span>
+			<br>
+			<select name="paramType2" id="secondParamType" onChange="changeTextBox2();">
+				<option value="none">none</option>
+				<option value="int">Int</option>
+				<option value="float">Float</option>
+				<option value="double">Double</option>
+				<option value="short">Short</option>
+				<option value="long">Long</option>
+				<option value="char">Char</option>
+				<option value="boolean">Boolean</option>
+				<option value="string">String</option>
+			</select>
+			<input type="text" name="name2" id="nameBox2" class="padding" disabled>
+			<br>
+			
+			<script>
+				function changeTextBox2()
+				{
+					
+					var str = document.getElementById("secondParamType").value;
+					
+					if(str != "none")
+					{
+						document.getElementById("nameBox2").disabled = false;
+			
+					}
+					else
+					{
+						document.getElementById("nameBox2").disabled = true;
+					}
+					
+				}
+			
+		
+			</script>
+			
+			<span class="paramLabel"> Param Type:</span>	
+			<span> Param Name: </span>
+			<br>
+			<select name="paramType3" id="thirdParamType" onChange="changeTextBox3();">
+				<option value="none">none</option>
+				<option value="int">Int</option>
+				<option value="float">Float</option>
+				<option value="double">Double</option>
+				<option value="short">Short</option>
+				<option value="long">Long</option>
+				<option value="char">Char</option>
+				<option value="boolean">Boolean</option>
+				<option value="string">String</option>
+			</select>
+			<input type="text" name="name3" id="nameBox3" class="padding" disabled>
+			<br>
+			
+			<script>
+				function changeTextBox3()
+				{
+					
+					var str = document.getElementById("thirdParamType").value;
+					
+					if(str != "none")
+					{
+						document.getElementById("nameBox3").disabled = false;
+			
+					}
+					else
+					{
+						document.getElementById("nameBox3").disabled = true;
+					}
+					
+				}
+			
+		
+			</script>
+			
+			<span class="paramLabel"> Param Type:</span>	
+			<span> Param Name: </span>
+			<br>
+			<select name="paramType4" id="fourthParamType" onChange="changeTextBox4();">
+				<option value="none">none</option>
+				<option value="int">Int</option>
+				<option value="float">Float</option>
+				<option value="double">Double</option>
+				<option value="short">Short</option>
+				<option value="long">Long</option>
+				<option value="char">Char</option>
+				<option value="boolean">Boolean</option>
+				<option value="string">String</option>
+			</select>
+			<input type="text" name="name4" id="nameBox4" class="padding" disabled>
+			<br>
+			
+			<script>
+				function changeTextBox4()
+				{
+					
+					var str = document.getElementById("fourthParamType").value;
+					
+					if(str != "none")
+					{
+						document.getElementById("nameBox4").disabled = false;
+			
+					}
+					else
+					{
+						document.getElementById("nameBox4").disabled = true;
+					}
+					
+				}
+			
+		
+			</script>
+			
+		
+		</div>
+		
+		<div style="position:relative; top:230px">
+			<b><i>Name of Function:</b></i> <br>
+			<input type="text" name="funcName" required>	
+		</div>
+		
+		<div style="position:relative; top:240px">
+			<b><i>Number of Points Worth:</b></i> <br>
+			<input type="text" name="pointValue" required>
+		
+		</div>
+		
+		
+		<div style="position:relative; top:260px">
+			<b><i>Constraints:</b></i><br>
+			<input type="checkbox" name="constraint1" value="ifElse"> If/Else <br>
+			<input type="checkbox" name="constraint2" value="forLoop"> For Loop <br>
+			<input type="checkbox" name="constraint3" value="whileLoop"> While Loop <br>
+			<input type="checkbox" name="constraint4" value="fileProc"> File Processing <br>
+			<input type="checkbox" name="constraint5" value="switch"> Switch Statement <br>
+		</div>
+				
+		
+		<input type="submit" value="Submit Question" style="position:relative; top:300px">
+		
+	</form>
+	
+	</body>
+
+
+
+
+
+</html>

@@ -1,3 +1,8 @@
+<!-- Daniel Thomas -->
+<!-- Dhruv Patel -->
+<!-- Elad Bergrin-->
+<!-- FRONT END CODE - HTML FORM CODE -->
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -15,13 +20,23 @@
                      alert("Username can only contain letters and numbers!");
                      return false;
                  }
-                 else if ( /[^a-zA-Z0-9]/.test(pass) ) //ensures password is alphanumeric
+                 else if ( /[^a-zA-Z0-9\!\-\,\#\@\*\&\^\%\~\$\?\.\ ]/.test(pass) ) //ensures password is alphanumeric w/ special chars
                  {
-                     alert("Password can only contain letters and numbers!");
+                     alert("Password can only contain letters,numbers and special chars!");
                      return false;                
                  }
                  else
-                     return true;
+                 {
+                     if( pass.length < 3 || pass.length > 24)
+                     {
+                       alert("Password is between 3 and 24 characters!");
+                       return false;
+                     }   
+                     else
+                       return true;        
+                 
+                 }
+                     
         }
 
 </script>
@@ -39,7 +54,7 @@
 			                       <input type="text" name="username" required> <br>                              
                                                                                           
 			                       <b>Password</b> <br>
-			                       <input type="text" name="password" required> <br><br>
+			                       <input type="password" name="password" required> <br><br>
 
 			                       <input type="submit" value="Submit">
 

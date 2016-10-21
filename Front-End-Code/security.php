@@ -2,25 +2,39 @@
 <body>
 
 <?php
+require 'request.php';
 
-$info = array("username" => $_POST["username"],"password" => $_POST["password"] );//puts user and pass info into an array
+//Daniel Thomas 
+//Dhruv Patel 
+//Elad Bergrin
+//FRONT END CODE - PHP BACKEND SCRIPT
 
-$json_data = json_encode($info);
+$user = $_POST["username"]; 
+$pass = $_POST["password"];
 
-$ch = curl_init();
-//sends the info
-curl_setopt($ch, CURLOPT_URL, "https://web.njit.edu/~dyp6/");
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $info);
+$info = array("username" => $user,"password" => $pass );//puts user and pass info into an array
+$type = "login";
 
-//receives the info
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//Sends type and info to request.php 
+$j_response = request($type,$info, "https://web.njit.edu/~dyp6/CS490/MidEndLogin.php" );
 
-$response = curl_exec($ch); //stores output of url into variable
+//print_r($j_response);
 
-curl_close($ch); //closes the connection 
-
-var_dump($response); //shows output, only for test purposes
+if($j_response["NJITValid"])
+{
+  echo "You cannot use actual NJIT login information!";
+}
+else if (!$j_response["loginAttempt"])
+{
+  echo "Invalid login information. Please try again";
+}
+else
+{
+  if($j_response["Role"] === "Student")
+    echo "Welcome Student!";
+  else
+    header("Location: http://afsaccess2.njit.edu/~dt242/teacherAdd.html");
+}
 
 
 
