@@ -1,5 +1,5 @@
 /*Elad Bergrin*/
-/*Group Members:
+/*Group Members: 
   Daniel Thomas
   Dhruv Patel
 */
@@ -21,49 +21,137 @@ INSERT INTO CS490_Users VALUES('xz312', 'not-a-person', 'Student');
 /* Questions, exams, parameters, and answers are most-likely going to be read-heavy and write-heavy so using InnoDB may be better than MyISAM*/
 /*A lot of these use VARCHAR(50) because of uncertainties about length*/
 
-CREATE TABLE Constraints(
+CREATE TABLE Constraints( /*Constraint is a reserved word*/
   QuestionID INT,
-  Constraint ENUM('if/else', 'switch', 'file handling', 'for loop', 'while loop')
+  `Constraint` ENUM('if/else', 'switch', 'file handling', 'for loop', 'while loop')
   /*others that can be added: OOP, recursion, program structure, number of variables(ex: swap using only two variables), etc.*/
 )ENGINE=InnoDB;
+
+ALTER TABLE Constraints MODIFY QuestionID INT NOT NULL;
+ALTER TABLE Constraints MODIFY `Constraint` enum('if/else', 'switch', 'file handling', 'for loop', 'while loop') NOT NULL;
 
 CREATE TABLE Parameters(
   paramID INT AUTO_INCREMENT PRIMARY KEY,
   dataType ENUM('int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'),
   varName VARCHAR(50),
-  QuestionID INT FOREIGN KEY REFERENCES Questions(QuestionID)
-  ON UPDATE CASCADE
+  QuestionID INT,
+  FOREIGN KEY(QuestionID) REFERENCES Questions(QuestionID) 
+  ON UPDATE CASCADE 
   ON DELETE CASCADE
 )ENGINE=InnoDB;
 
+ALTER TABLE Parameters MODIFY dataType enum('int', 'char', 'String','short', 'long', 'float', 'double', 'boolean', 'byte') NOT NULL;
+ALTER TABLE Parameters MODIFY varName varchar(50) NOT NULL;
+ALTER TABLE Parameters MODIFY QuestionID int NOT NULL;
+
 CREATE TABLE Questions(
   QuestionID INT AUTO_INCREMENT PRIMARY KEY,
-  Text VARCHAR(1024) NOT NULL, /* This can be changed; temporary length used */
+  `Text` VARCHAR(1024) NOT NULL, /* This can be changed; temporary length used */ /*Text is a reserved word*/
   Points INT,
   returnType ENUM('none', 'int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'), /*return type of none means void */
-  functionName VARCHAR(50),
+  functionName VARCHAR(50)
 )ENGINE=InnoDB;
+
+ALTER TABLE Questions MODIFY returnType enum('none', 'int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte') NOT NULL;
+ALTER TABLE Questions MODIFY Points int NOT NULL;
+ALTER TABLE Questions MODIFY functionName varchar(50) NOT NULL;
 
 CREATE TABLE Exam(
   ExamID INT AUTO_INCREMENT PRIMARY KEY,
   ExamName VARCHAR(50),
-  QuestionID INT,
   examStatus ENUM('Active', 'Inactive'), /*It may be better to make an exam inactive rather than delete it; can be changed later*/
-  adminStatus ENUM('Graded', 'Ungraded'), /*may not need this field or one below it *i/
-  studentStatus ENUM('Attempted', 'Not attempted'),
-  FOREIGN KEY(QuestionID) REFERENCES Questions(QuestionID)
-}ENGINE=InnoDB;
+  adminStatus ENUM('Graded', 'Ungraded'), /*may not need this field or one below it */
+  studentStatus ENUM('Attempted', 'Not-attempted')
+)ENGINE=InnoDB;
+
+ALTER TABLE Exam MODIFY ExamName VARCHAR(50) NOT NULL;
+ALTER TABLE Exam ADD AdminID VARCHAR(10) AFTER  ExamName;
+ALTER TABLE Exam ADD scores enum('Released', 'Not Released') DEFAULT 'Not Released';
+ALTER TABLE Exam MODIFY ExamName VARCHAR(50) UNIQUE;
+ALTER TABLE Exam CHANGE adminStatus GradingStatus enum('Graded', 'Ungraded') DEFAULT 'Ungraded';
+ALTER TABLE Exam MODIFY examStatus enum('Active', 'Inactive') DEFAULT 'Inactive';
+ALTER TABLE Exam DROP COLUMN studentStatus;
+
+
+
+CREATE TABLE ExamQuestions(
+  ExamID INT,
+  QuestionID INT
+)ENGINE=InnoDB;
 
 CREATE TABLE Answer(
   ID INT AUTO_INCREMENT PRIMARY KEY,
-  Code VARCHAR(10000), /* Not sure how many characters to store or how code will be stored */
+  `Code` VARCHAR(10000), /* Not sure how many characters to store or how code will be stored */ /*Code is a reserved word*/
   FeedBack VARCHAR(5000), /*Same as comment above */
-  UserID INT,
+  UserID VARCHAR(10),
   QuestionID INT,
-  ExamID, INT,
+  ExamID INT,
   returnType ENUM('none', 'int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'),
   returnValue VARCHAR(50),
-  FOREIGN KEY(UserID) REFERENCES CS490_Users(UserID),
   FOREIGN KEY(QuestionID) REFERENCES Questions(QuestionID) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY(ExamID) REFERENCES Exam(ExamID) ON UPDATE CASCADE /*ON DELETE CASCADE*/
 )ENGINE=InnoDB;
+
+CREATE TABLE Scores(   
+  ExamID INT NOT NULL,
+  StudentID VARCHAR(10) NOT NULL,
+  TotalPoints INT NOT NULL,
+  Points_Scored DECIMAL(3, 2) NOT NULL,
+  FOREIGN KEY(ExamID) REFERENCES Exam(ExamID)    
+)ENGINE=InnoDB;
+			
+
+/*Questions without constraints: SELECT Questions.* FROM Questions JOIN Constraints ON Questions.QuestionID != Constraints.QuestionID; */
+/*Questions with constraints: SELECT Questions.* FROM Questions JOIN Constraints ON Questions.QuestionID = Constraints.QuestionID; */
+
+/*SELECT Questions.QuestionID, Questions.Points, Constraints.Constraint, Parameters.dataType, Parameters.varName FROM (Questions LEFT JOIN Parameters ON Questions.QuestionID = Parameters.QuestionID) LEFT JOIN Constraints ON Questions.QuestionID = Constraints.QuestionID;
+*/
+/*SELECT Questions.QuestionID, Questions.Points, Constraints.Constraint, Parameters.dataType, Parameters.varName FROM (Questions LEFT JOIN Parameters ON Questions.QuestionID = Parameters.QuestionID) LEFT JOIN Constraints ON Questions.QuestionID = Constraints.QuestionID GROUP BY Questions.QuestionID;
+*/
+
+/*SELECT GROUP_CONCAT(varname) FROM Parameters GROUP BY QuestionID;*/
+/*SELECT GROUP_CONCAT(dataType), GROUP_CONCAT(varName) FROM Parameters GROUP BY QuestionID;*/
+/*SELECT GROUP_CONCAT(dataType SEPARATOR ', ') AS 'Parameter dataTypes', GROUP_CONCAT(varName SEPARATOR ', ') AS 'Parameter Names' FROM Parameters GROUP BY QuestionID;*/
+
+/*SELECT Questions.functionName, GROUP_CONCAT(Parameters.dataType SEPARATOR ', ') AS 'parameter types', GROUP_CONCAT(Parameters.varName SEPARATOR ', ') AS 'parameter names' FROM Questions LEFT JOIN Parameters ON Questions.QuestionID = Parameters.QuestionID GROUP BY Parameters.QuestionID;*/
+
+/*SELECT Questions.QuestionID, GROUP_CONCAT(`Constraint`) FROM Constraints
+ * JOIN Questions ON Constraints.QuestionID = Questions.QuestionID GROUP BY
+ * Constraints.QuestionID; */
+
+ /*SELECT Questions.QuestionID, GROUP_CONCAT(dataType), GROUP_CONCAT(varName)
+  * FROM Parameters JOIN Questions ON Parameters.QuestionID =
+  * Questions.QuestionID GROUP BY Parameters.QuestionID;
+  */
+
+/* SELECT Questions.Text, Questions.functionName,
+ * Questions.Points,Questions.returnType, GROUP_CONCAT(DISTINCT Parameters.dataType
+ * SEPARATOR ','), GROUP_CONCAT(DISTINCT Parameters.varName SEPARATOR ', '),
+ * GROUP_CONCAT(Constraints.Constraint SEPARATOR ', ') FROM Questions LEFT
+ * JOIN Parameters ON Questions.QuestionID = Parameters.QuestionID LEFT JOIN
+ * Constraints ON Questions.QuestionID = Constraints.QuestionID GROUP BY
+ * Questions.QuestionID;
+ */
+
+
+INSERT INTO Questions VALUES(NULL, 'Print the string that says "Hello, World!" on a line by itself', 1, 'none', 'printHelloWorld');
+
+INSERT INTO Questions VALUES(NULL, 'Add parameter A to parameter B and return the result', 2, 'int', 'addInts');
+INSERT INTO Parameters VALUES(NULL, 'int', 'A', 2);
+INSERT INTO Parameters VALUES(NULL, 'int', 'B', 2);
+
+INSERT INTO Questions VALUES(NULL, 'Write a function that uses a loop to print out every digit of a long called num separated by a space on one line', 5, 'long', 'parseDigits');
+INSERT INTO Parameters VALUES(NULL, 'long', 'num', 3);
+INSERT INTO Constraints VALUES(2, 'while loop');
+UPDATE Constraints SET QuestionID = 3 WHERE QuestionID = 2; /*I made a mistake on the insert above */
+
+
+INSERT INTO Questions VALUES(NULL, 'Write a function to update the balance of a bank account based on whether a string says deposit(add money) or  withdrawal(subtract money) and the amount in a double called transaction_amount; this function should return a double', 10, 'double', 'upDateBankAccount');
+INSERT INTO Parameters VALUES(NULL, 'double', 'initial_balance', 4);
+INSERT INTO Parameters VALUES(NULL, 'String', 'transaction_type', 4);
+INSERT INTO Parameters VALUES(NULL, 'double', 'transaction_amount', 4);
+
+
+
+
+
