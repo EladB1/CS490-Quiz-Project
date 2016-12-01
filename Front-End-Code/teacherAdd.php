@@ -59,7 +59,7 @@ if($_SESSION["role"] != "Teacher")
 	textarea
 	{
 		position: absolute;
-		top: 545px;
+		top: 445px;
 		resize: none;
 	}
 	
@@ -85,11 +85,13 @@ if($_SESSION["role"] != "Teacher")
  
    table
    {
+	 background-color:black;
 	 border: 10px double white;
-     width: 120%;
+     width: 800px;
+	 height: auto;
 	 color: black;
      position: absolute;
-     left: 450px;
+     left: 350px;
      top: 100px; 
    }
  
@@ -97,17 +99,14 @@ if($_SESSION["role"] != "Teacher")
    {
      
      border-collapse: collapse;
-     //border-bottom: 1px solid #ddd;
-	  width: 700px;
    }
    
    .Table_Header
    {
-	   position:absolute;
+	   position:fixed;
 	   top: 0;
    }
    
- 
    th, td
    {  
 	 border: 1px solid black;
@@ -118,8 +117,10 @@ if($_SESSION["role"] != "Teacher")
    table tbody
    {
 		display: block;
+		width: 100%;
 		height: 600px;
 		overflow: auto;
+		background-color:lightgray;
 
    }
  
@@ -192,11 +193,12 @@ if($_SESSION["role"] != "Teacher")
     </label>
    </form>
 	
+	<div style="width:100%">
 	<form name="questionForm" action="submitQuestion.php" method="post">
 	
 		<div>
-		<p style="position:absolute; top:510px"><b><i>Enter problem description here:</b></i> </p>
-			<textarea name="description" placeholder="Enter some text..." rows="7" cols="50" required></textarea>
+		<p style="position:absolute; top:410px"><b><i>Enter problem description here:</b></i> </p>
+			<textarea name="description" placeholder="Enter some text..." rows="7" cols="40" required></textarea>
 		</div>
 		
 		<br>
@@ -204,11 +206,9 @@ if($_SESSION["role"] != "Teacher")
 		<div style="position:absolute; top:50px">
 			<p><b><i>Select a return type: </b></i></p>
 			<select name="returnType" id="selectReturn" >
-				<option value="void">Void</option>
+				<option value="none">Void</option>
 				<option value="int">Int</option>
 				<option value="float">Float</option>
-				<option value="short">Short</option>
-				<option value="long">Long</option>
 				<option value="boolean">Boolean</option>
 				<option value="String">String</option>
 			</select>
@@ -216,7 +216,7 @@ if($_SESSION["role"] != "Teacher")
 		
 		
 		
-		<div style="position:absolute; top:250px">
+		<div style="position:absolute; top:140px">
 			<b><i>Please enter parameters here (if any):</b></i> <br>
 			
 			<span class="paramLabel"> Param Type:</span>	
@@ -226,8 +226,6 @@ if($_SESSION["role"] != "Teacher")
 				<option value="none">none</option>
 				<option value="int">Int</option>
 				<option value="float">Float</option>
-				<option value="short">Short</option>
-				<option value="long">Long</option>
 				<option value="boolean">Boolean</option>
 				<option value="String">String</option>
 			</select>
@@ -262,8 +260,6 @@ if($_SESSION["role"] != "Teacher")
 				<option value="none">none</option>
 				<option value="int">Int</option>
 				<option value="float">Float</option>
-				<option value="short">Short</option>
-				<option value="long">Long</option>
 				<option value="boolean">Boolean</option>
 				<option value="String">String</option>
 			</select>
@@ -298,8 +294,6 @@ if($_SESSION["role"] != "Teacher")
 				<option value="none">none</option>
 				<option value="int">Int</option>
 				<option value="float">Float</option>
-				<option value="short">Short</option>
-				<option value="long">Long</option>
 				<option value="boolean">Boolean</option>
 				<option value="String">String</option>
 			</select>
@@ -334,8 +328,6 @@ if($_SESSION["role"] != "Teacher")
 				<option value="none">none</option>
 				<option value="int">Int</option>
 				<option value="float">Float</option>
-				<option value="short">Short</option>
-				<option value="long">Long</option>
 				<option value="boolean">Boolean</option>
 				<option value="String">String</option>
 			</select>
@@ -366,28 +358,26 @@ if($_SESSION["role"] != "Teacher")
 		
 		</div>
 		
-		<div style="position:absolute; top:430px">
+		<div style="position:absolute; top:330px">
 			<b><i>Name of Function:</b></i> <br>
 			<input type="text" name="funcName" required>	
 		</div>
 		
-		<div style="position:absolute; top:475px">
+		<div style="position:absolute; top:375px">
 			<b><i>Number of Points Worth:</b></i> <br>
 			<input type="text" name="pointValue" required>
 		
 		</div>
 		
 		
-		<div style="position:absolute; top:660px">
+		<div style="position:absolute; top:560px">
 			<b><i>Constraints:</b></i><br>
 			<input type="checkbox" name="constraint1" value="if/else"> If/Else <br>
 			<input type="checkbox" name="constraint2" value="for loop"> For Loop <br>
 			<input type="checkbox" name="constraint3" value="while loop"> While Loop <br>
-			<input type="checkbox" name="constraint4" value="file handling"> File Processing <br>
-			<input type="checkbox" name="constraint5" value="switch"> Switch Statement <br>
 		</div>
 		
-		<div style="position:absolute; top:780px">
+		<div style="position:absolute; top:650px">
 			<b><i>Difficulty:</b></i><br>
 			<select name="Difficulty" >
 				<option value="easy">Easy</option>
@@ -398,11 +388,12 @@ if($_SESSION["role"] != "Teacher")
 		</div>
 				
 		
-		<input class="button" type="submit" value="Submit Question" style="position:absolute; top:825px">
+		<input class="button" type="submit" value="Submit Question" style="position:absolute; top:705px">
    
    </form>
+   </div>
    
-   
+   <div style="width:50%">
    <form name="testForm" action="submitTest.php" method="post"> 
    
    
@@ -474,16 +465,16 @@ if($_SESSION["role"] != "Teacher")
      
    </div>
    
-   <div style="position:absolute; top:730px; left:670px; ">
+   <div style="position:absolute; top:730px; left:570px; ">
 			<b><i>Name of Test: </b></i><input type="text" name="testName" size="35" required>
 	</div>
    
-   <input class="button" type="submit" value="Submit Test" style="position:absolute; top:770px; left:820px; ">
+   <input class="button" type="submit" value="Submit Test" style="position:absolute; top:770px; left:720px; ">
   
   </form>
   
   <form method="post" action="#">
-	  <div style="position:absolute; left:450px;">
+	  <div style="position:absolute; left:350px;">
 	  <b><i>Filter: </b></i> 
 	  <input type="radio" name="filter" value="Text" > Description &nbsp;
 	  <input type="radio" name="filter" value="Points"> Point Value &nbsp;
@@ -492,9 +483,10 @@ if($_SESSION["role"] != "Teacher")
 	  <input type="radio" name="filter" value="Difficulty"> Difficulty
 	  </div>
   
-	<input class="button" name="Submit Filter" type="submit" value="Submit Filter" style="position:absolute;right:90px">
+	<input class="button" name="Submit Filter" type="submit" value="Submit Filter" style="position:absolute;left:1000px">
   
   </form>
+  </div>
   
    
    

@@ -56,31 +56,41 @@ if($_SESSION["role"] != "Student")
 		  background-color: red;
 	  }
 	
-	  body {background-color: Bisque;}
+	  body 
+	{
+		//background-color: #006699;
+		background-color: lightgray;
+		//color: 	#F0FFF0;	
+		color: navy;
+	
+	}
  
     table
      {
-       width: 100%;
-	   height: 100%;
-	   border=0;
-	   cellspacing = 0;
-	   cellpadding = 0;
-       position: absolute;
-       margin-left:auto;
-       margin-right:auto;
-	   padding:0;
-	   margin:0;
-       //left: 350px;
-       top:100px; 
+		  background-color:black;
+		  border: 10px double white;
+		  text-align: center;
+		  width: 50%;
+		  height: 50%;
+		  border=0;
+		  cellspacing = 0;
+		  cellpadding = 0;
+		  position: absolute;
+		  margin-left:auto;
+		  margin-right:auto;
+		  padding:0;
+		  margin:0;
+		  //left: 350px;
+		  top:100px; 
      }
  
      table, th, td
      {
 		padding:0;
 		margin:0;	 
-       border: 1px solid black;
+       //border: 1px solid black;
        border-collapse: collapse;
-       border-bottom: 1px solid #ddd;
+       //border-bottom: 1px solid #ddd;
 	   //width: 700px;
 	   width: 100%;
 	   height: 48%;
@@ -98,6 +108,7 @@ if($_SESSION["role"] != "Student")
    
      table tbody
      {
+		  background-color:lightgray;
 		  padding:0;
 		  margin:0;
 		  display: block;
@@ -107,6 +118,8 @@ if($_SESSION["role"] != "Student")
 		  height: 100%;
 
      }
+	 
+	 
  
      table#questionTable tr:nth-child(even) 
     {
@@ -142,6 +155,25 @@ if($_SESSION["role"] != "Student")
      right:20px;
      top:20px;
     }
+	
+	.button
+   {
+		width: 140px;
+		//margin:0 auto;
+		display:block;
+		text-align:center;
+		
+		
+		padding:1px 3px;
+		font-family:helvetica;
+		font-size:16px;
+		font-weight:100;
+		color:#fff;
+		background: #587286;
+		border:0;
+		font-weight:100;
+
+   }
 	
 	</style>
 	</head>
@@ -207,7 +239,7 @@ if($_SESSION["role"] != "Student")
      
    
   
-  echo '<input type="submit" value="Take Test!" style="position:relative; top:500px; left:500px; ">';
+  echo '<input type="submit" class="button" value="Take Test!" style="position:absolute; top:550px; left:50%; ">';
   
   ?>
   

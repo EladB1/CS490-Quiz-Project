@@ -55,10 +55,19 @@ if($_SESSION["role"] != "Teacher")
 		  background-color: red;
 	  }
 	
-	  body {background-color: Bisque;}
+	  body 
+	{
+		//background-color: #006699;
+		background-color: lightgray;
+		//color: 	#F0FFF0;	
+		color: navy;
+	
+	}
  
     table
      {
+	   border: 10px double white;
+	   background-color:black;
        width: 120%;
        position: absolute;
        left: 100px;
@@ -67,9 +76,9 @@ if($_SESSION["role"] != "Teacher")
  
      table, th, td
      {
-       border: 1px solid black;
+       //border: 1px solid black;
        border-collapse: collapse;
-       border-bottom: 1px solid #ddd;
+       //border-bottom: 1px solid #ddd;
 	     width: 700px;
      }
  
@@ -84,6 +93,7 @@ if($_SESSION["role"] != "Teacher")
 		  display: block;
 		  height: 400px;
 		  overflow: auto;
+		  background-color:lightgray;
 
      }
  
@@ -115,6 +125,24 @@ if($_SESSION["role"] != "Teacher")
      top:20px;
     }
 	
+	.button
+	{
+		width: 200px;
+		text-align: center;
+
+		display:block;
+		
+		padding:2px 4px;
+		font-family:helvetica;
+		font-size:16px;
+		font-weight:100;
+		color:#fff;
+		background: #587286;
+		border:0;
+		font-weight:100;
+
+	}
+	
 	</style>
 	</head>
 	
@@ -133,7 +161,7 @@ if($_SESSION["role"] != "Teacher")
     </label>
    </form>
    
-<form name="testForm" action="releaseScores.php" method="post"> 
+<form style="text-align:center" name="testForm" action="releaseScores.php" method="post"> 
  
  <?php
 		require 'request.php';
@@ -192,7 +220,7 @@ if($_SESSION["role"] != "Teacher")
      
   ?>
   
-  <input type="submit" value="Release Tests & Scores" style="position:absolute; top:550px; left:310px; ">
+  <input type="submit" class="button" value="Release Tests & Scores" style="position:absolute; top:550px; left:330px; ">
   
   </form>
  

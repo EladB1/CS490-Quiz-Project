@@ -20,21 +20,63 @@ $sendName = array("ExamName" => $_GET["view"]);
 
 
 $j_response = request($type,$sendName,"https://web.njit.edu/~dyp6/CS490/MidToBack.php" );
-//print_r($j_response);
+//var_dump($j_response);
 
 /*if(isset($_POST)){ //check if form was submitted
 	header("Location:studentView.php;" );
 
 }*/
 
+$string = '
+	<html lang="en-US">
+  <head>
+  <style>
+	div
+	{
+		width: 500px;
+		word-break: break-all;
+
+	}
+	body 
+	{
+		//background-color: #006699;
+		background-color: lightgray;
+		//color: 	#F0FFF0;	
+		color: navy;
+	
+	}
+	
+	.button1
+	  {
+		width: 140px;
+		//margin:0 auto;
+		display:block;
+		
+		padding:2px 4px;
+		font-family:helvetica;
+		font-size:16px;
+		font-weight:100;
+		color:#fff;
+		background: #587286;
+		border:0;
+		font-weight:100;
+
+	   }
+
+  </style>
+  </head>
+  <body>
+';
+
    
-echo '<form name="testAnswers" action="" method="post">';
+$string .= '<form name="testAnswers" action="" method="post">';
 
 $count = 1;
+$totalPoints = 0;
 
 foreach($j_response as $question)
 {
-	echo '<input type="hidden" name ="test" value='.$testName.'>';
+	$string .= '<input type="hidden" name ="test" value='.$testName.'>';
 	
 	$funcName;
 	$prompt;
@@ -58,7 +100,10 @@ foreach($j_response as $question)
 		else if($key == "functionName")
 			$funcName = $element;
 		else if($key == "Points")
+		{
 			$value = $element;
+			$totalPoints += $element;
+		}
 		else if($key == "returnType")
 			$return = $element;
 		else if($key == "Parameter types")
@@ -77,27 +122,33 @@ foreach($j_response as $question)
 	//var_dump($p_nameArray);
 	
 	if($value == 1)
-		echo 'Question '.$count.': '.$value.' point';
+		$string .= 'Question '.$count.': '.$value.' point';
 	else
-		echo 'Question '.$count.': '.$value.' points';
-	echo '<br>'.$prompt;
-	echo '<br>Function Name: '.$funcName.'<br>';
+		$string .= 'Question '.$count.': '.$value.' points';
+	$string .= '<br>'.$prompt;
+	$string .= '<br>Function Name: '.$funcName.'<br>';
 	
 	if($p_typeArray[0] != "")
 	{
 		for($i = 0; $i < count($p_typeArray); $i++)
 		{
-			echo "Param Type " . ($i+1) . ": ".$p_typeArray[$i];
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-			echo "Param Name ". ($i+1) .": ".$p_nameArray[$i]."<br>";
+			$string .= "Param Type " . ($i+1) . ": ".$p_typeArray[$i];
+			$string .= "&nbsp;&nbsp;&nbsp;&nbsp;";
+			$string .= "Param Name ". ($i+1) .": ".$p_nameArray[$i]."<br>";
 		}
 	}
 	
-	echo '<br><br>';
+	$string .= '<br><br>';
 	
 	$count++;
 	
 }
+
+$string .="Total Points: ".$totalPoints;
+
+$string .= '<br><br><input class=button1 value=Back type=button onclick="location=\'teacherCreate.php\'">';
+
+echo $string;
 	
 	
 

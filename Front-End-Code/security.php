@@ -21,13 +21,10 @@ $j_response = request($type,$info, "https://web.njit.edu/~dyp6/CS490/MidEndLogin
 
 //print_r($j_response);
 
-if($j_response["NJITValid"])
+if (!$j_response["loginAttempt"])
 {
-  echo "You cannot use actual NJIT login information!";
-}
-else if (!$j_response["loginAttempt"])
-{
-  echo "Invalid login information. Please try again";
+  //echo "Invalid login information. Please try again";
+  echo "<script>alert('Invalid username or password. Please try again.'); window.location = 'http://afsaccess2.njit.edu/~dt242';</script>";
 }
 else
 {

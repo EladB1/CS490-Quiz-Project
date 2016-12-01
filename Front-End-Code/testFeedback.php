@@ -21,6 +21,7 @@
 	
 	//var_dump($j_response);
 	
+	
 	$string = '
 	
 		<html lang="en-US">
@@ -32,6 +33,30 @@
 		word-break: break-all;
 
 	}
+	body 
+	{
+		//background-color: #006699;
+		background-color: lightgray;
+		//color: 	#F0FFF0;	
+		color: navy;
+	
+	}
+	.button1
+	  {
+		width: 140px;
+		//margin:0 auto;
+		display:block;
+		
+		padding:2px 4px;
+		font-family:helvetica;
+		font-size:16px;
+		font-weight:100;
+		color:#fff;
+		background: #587286;
+		border:0;
+		font-weight:100;
+
+	   }
 
   </style>
   </head>
@@ -39,6 +64,8 @@
   ';
   
   $count = 1;
+  $totalEarned = 0;
+  $totalPossible = 0;
   
   foreach ($j_response as $var)
   {
@@ -53,6 +80,8 @@
 	  $pointsEarned;
 	  $correctReturn;
 	  $correctResult;
+	  $code;
+	  
 	  
 	  foreach ($var as $key => $value)
 	  {
@@ -65,9 +94,14 @@
 			  $text = $value;
 		  }
       else if ($key == "Points")
+	  {
         $pointsWorth = $value;
+		$totalPossible += $value;
+	  }
       else if ($key == "returnType")
         $return = $value;
+	  else if ($key == "Code")
+		$code = $value;  
       else if ($key == "Parameter types")
         $paramTypes = $value;
       else if ($key == "Parameter names")
@@ -77,7 +111,10 @@
       else if ($key == "FeedBack")
         $feedback = $value;
       else if ($key == "pointsReceived")
+	  {
         $pointsEarned = $value;
+		$totalEarned += $value;
+	  }
       else if ($key == "Correct returnType")
         $correctReturn = $value;
       else
@@ -91,90 +128,76 @@
 			<div style="background-color:black;color:white;padding:20px;">
         Exam: '.$_POST["nameArray"][0].'
 				<h1>Question '.$count.':</h1>
-        '.$text.'
-			</div>
+        <font size="5"><i>'.$text.'</i></font>
       
-			<div style="padding:20px;">
-				<h2>Function Name: '.$funcName.'<br>
-        Return Type: '.$return.'<br>
-        Parameter Types: '.$paramTypes.'<br>
-        Parameter Names: '.$paramNames.'<br>';
+		<h2>Function Name: '.$funcName.'<br>
+        Return Type: '.$return.'<br>';
+		if($paramTypes == "")
+		{
+			$string .= 'Parameter Types: None <br>';
+			$string .= 'Parameter Names: None <br>';
+        
+		}
+		else
+		{
+			
+			$string .= 'Parameter Types: '.$paramTypes.'<br>';
+			$string .= 'Parameter Names: '.$paramNames.'<br>';
+		}
         if($constraints == "")
           $string .='Constraints    : None <br>';
         else
           $string .='Constraints    : '.$constraints.'<br>';
         $string .='</h2>
        </div>';
+	   $code = nl2br($code);
+	   $string .='
+	   <div style="background-color:white;color:black;padding:20px;">
+	   <h2>Your Code:</h2>
+	   <p>
+			<pre>'.$code.'</pre>
+	   </p>
+	   </div>
+	   
+	   
+	   ';
+	   
+	   $string .= '
+       <div style="background-color:black;color:white;padding:20px;">
+		      <h2>Comments:</h2>
+          <p>
+            '.$feedback.'
+          </p>
+	     </div>'
+       ;  
        
        $string .= '
-       <div style="background-color:grey;padding:20px;">
+       <div style="background-color:white;color:black;padding:20px;">
 		      <h2>Result:</h2>
           <p>
             Points Possible: '.$pointsWorth.'<br>
             Points Earned  : '.$pointsEarned.'<br>
           </p>
-	     </div>';
-      
-       $string .= '
-       <div style="background-color:#55676A;padding:20px;">
-		      <h2>Comments:</h2>
-          <p>
-            '.$feedback.'
-          </p>
 	     </div>
-       <br><br>';      
+		 <br><br>';
+      
+           
 	  
 	  $count++;
   }//end foreach loop
   
-  $string .= '
-  <a href="studentScores.php">Back</a>';
-
-  /*
-	<div style="background-color:black;color:white;padding:20px;">
-		<h1>Question 1</h1>
-	</div>
-
-	<div style="padding:20px;">
-		<h2>The question:</h2>
-		<p>TextTextTextTextTextTextTextTextText</p>
-	</div>
-
-	<div style="padding:20px;">
-		<h2>Your answer:</h2>
-		<p style="width :50%;">TextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextTextText</p>
-	</div>
-
-	<div style="padding:20px;">
-		<h2>Comments:</h2>
-		<p>TextTextTextTextTextTextTextTextText</p>
-	</div>
+  $string .='
+	<div style="background-color:white;color:red;padding:20px;">
+	<h1>
+	Final Grade: '.$totalEarned.'/'.$totalPossible.'
+	</h1>
+	</div>';
+  
+  /*$string .= '
+  <a href="studentScores.php">Back</a>';*/
+  $string .= '<br><input class=button1 value=Back type=button onclick="location=\'studentScores.php\'">';
 
 
-
-	Question 1<br>
-	This is a question
-
-
-
-	Question 1<br>
-	This is a question
-
-
-
-	Question 1<br>
-	This is a question
-
-
-	Question 1<br>
-	This is a question
-
-
-  </body>
-
-
-  </html>
-  ';*/
   
   echo $string;
 	

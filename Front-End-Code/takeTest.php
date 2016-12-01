@@ -1,44 +1,29 @@
 <?php
 session_start(); 
 require 'request.php';
-
 $testName = $_POST["attemptCheck"][0];
 $sendName = array('ExamName' => $testName);
-
-
 $request = 'checkAttempts';
   
 $sendData = array("examName" => $testName, "userID" => $_SESSION["username"] );
-
 $validResponse = request($request, $sendData, "https://web.njit.edu/~dyp6/CS490/MidToBack.php");
 //var_dump($validResponse);
 $validResponse = (array)$validResponse;
-
-/*if($validResponse[0] != "Allowed")
+if($validResponse[0] != "Allowed")
 {
   echo "<script>alert('You cannot attempt the test more than once!'); window.location = 'studentView.php';</script>";
   exit();
-}*/
-
-
-
+}
+if($testName == NULL && !isset($_POST["Submit_Test"]) )
+{
+	echo "<script>alert('Please select a test first!'); window.location = 'studentView.php';</script>";
+    exit();
+}
 $type = 'seeExam';
-
-
 $j_response = request($type,$sendName,"https://web.njit.edu/~dyp6/CS490/MidToBack.php" );
-//print_r($j_response);
-
-/*if(isset($_POST)){ //check if form was submitted
-	header("Location:studentView.php;" );
-
-}*/
-
    
-
 echo '<form name="testAnswers" action="" method="post">';
-
 $count = 1;
-
 foreach($j_response as $question)
 {
 	echo '<input type="hidden" name ="test" value='.$testName.'>';
@@ -113,22 +98,12 @@ foreach($j_response as $question)
 	$count++;
 	
 	
-
 	
 }
-
-
-
-echo '<input name="Submit Test"  type="submit" value="submit Test">';
-
+echo '<input class="button" name="Submit Test"  type="submit" value="submit Test">';
 echo '</form>';
-
 //print_r($_POST);
-
-
-
 //REQUEST STUFF HERE
-
 function stripTags($array)
 {
   foreach($array as $element)
@@ -138,9 +113,7 @@ function stripTags($array)
          
   return $array;
           
-
 }
-
 if(isset($_POST["Submit_Test"]))
 {
   
@@ -148,43 +121,52 @@ if(isset($_POST["Submit_Test"]))
   
   
   $sendMsg = array("user" => $_SESSION["username"], "questions" => $arr);
-
   requestTest($sendMsg,"https://web.njit.edu/~dyp6/CS490/GradeAnswer.php" );
 	
-	header("Location: studentView.php");
-	exit();
+  header("Location: studentView.php");
+  exit();
 	
 	
 }
-
-
-
-
-
-
-
-
-//echo "Hello!";
+//echo "Hello!"
+	
 echo '<style>';
 
-echo 'body {background-color: Bisque;}';
+echo 'body 
+	{
+		//background-color: #006699;
+		background-color: lightgray;
+		//color: 	#F0FFF0;	
+		color: navy;
+	
+	}
+	.button
+	{
+		width: 140px;
+		text-align: center;
+
+		display:block;
+		
+		padding:2px 4px;
+		font-family:helvetica;
+		font-size:16px;
+		font-weight:100;
+		color:#fff;
+		background: #587286;
+		border:0;
+		font-weight:100;
+
+	}
+	';
 
 echo '</style>';
 
-
-	
-	
-  
-  
-  
-  
-
-
-
-
-
-
-
-
-
 ?>
+
+
+	
+	
+  
+  
+  
+ 

@@ -22,7 +22,7 @@ for($i = 0; $i < count($paramType); $i++)
 
 }
 
-$constraints = array($_POST["constraint1"], $_POST["constraint2"], $_POST["constraint3"], $_POST["constraint4"], $_POST["constraint5"]);
+$constraints = array($_POST["constraint1"], $_POST["constraint2"], $_POST["constraint3"]);
 
 //echo $desc, $points, $return, $funcName, implode(" ",$paramCombined), implode(" ",$constraints);
 

@@ -56,7 +56,14 @@ if($_SESSION["role"] != "Student")
 		  background-color: red;
 	  }
 	
-	  body {background-color: Bisque;}
+	  body 
+	{
+		//background-color: #006699;
+		background-color: lightgray;
+		//color: 	#F0FFF0;	
+		color: navy;
+	
+	}
  
     table
      {
@@ -115,6 +122,24 @@ if($_SESSION["role"] != "Student")
      right:20px;
      top:20px;
     }
+	
+	.button
+	{
+		width: 140px;
+		text-align: center;
+		margin:0 auto;
+		display:block;
+		
+		padding:2px 4px;
+		font-family:helvetica;
+		font-size:16px;
+		font-weight:100;
+		color:#fff;
+		background: #587286;
+		border:0;
+		font-weight:100;
+
+	}
 	
 	</style>
 	</head>
@@ -191,7 +216,7 @@ if($_SESSION["role"] != "Student")
      
   
   if($j_response[0] != "Score not available for viewing.")
-       echo '<input type="submit" value="View Score" style="position:relative; top:500px; left:170px; ">';
+       echo '<input type="submit" class="button" value="View Score" style="position:absolute; top:510px; left:10%; ">';
   
   ?>
   
