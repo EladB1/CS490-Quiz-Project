@@ -6,6 +6,11 @@ FRONT END CODE - CSS SHEET FOR FORM
 */
 
 form { 
-margin: 0 auto; 
-width:250px;
+width: 400px;
+/*margin: 0 auto;*/
+margin-left: auto;
+margin-right: auto;
+text-align: center;
+display: inline-block;
 }
+

@@ -1,7 +1,8 @@
-<html>
-<body>
+<?php session_start(); 
+$_SESSION["username"] = $_POST["username"];
+$_SESSION["password"] = $_POST["password"];
 
-<?php
+//<?php
 require 'request.php';
 
 //Daniel Thomas 
@@ -30,16 +31,22 @@ else if (!$j_response["loginAttempt"])
 }
 else
 {
-  if($j_response["Role"] === "Student")
-    echo "Welcome Student!";
-  else
-    header("Location: http://afsaccess2.njit.edu/~dt242/teacherAdd.html");
+  if($j_response["Role"] === "Student"){
+    $_SESSION["role"] = "Student";
+    header("Location: http://afsaccess2.njit.edu/~dt242/studentView.php");
+	//exit();
+  }
+  else{
+    $_SESSION["role"] = "Teacher";
+    header("Location: http://afsaccess2.njit.edu/~dt242/teacherAdd.php");
+	//echo "Teacher logged in";
+	//exit();
+  }
 }
 
 
 
 ?>
 
-</body>
-</html>
+
 
