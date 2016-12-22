@@ -1,0 +1,211 @@
+/*Elad Bergrin*/
+/*Group Members: 
+  Daniel Thomas
+  Dhruv Patel
+*/
+CREATE TABLE CS490_Users(
+  /*userNum INT AUTO_INCREMENT PRIMARY KEY,*/ /*may make the table more efficient than using UserID as the Primary Key*/
+  UserID VARCHAR(10),
+  Password VARCHAR(24) NOT NULL, /*Using junk passwords so no need to store
+  hashes*/
+  Role ENUM('Admin', 'Student') NOT NULL,
+  PRIMARY KEY(UserID)
+)ENGINE=MyISAM; /* Read-heavy table*/
+
+INSERT INTO CS490_Users VALUES('eb86', 'l33t-h@ck$', 'Admin');
+INSERT INTO CS490_Users VALUES('dt242','hello,world!', 'Admin');
+INSERT INTO CS490_Users VALUES('dyp6', 'quiz-project', 'Admin');
+INSERT INTO CS490_Users VALUES('wx411', 'whoisthis?', 'Student');
+INSERT INTO CS490_Users VALUES('xz312', 'not-a-person', 'Student');
+CREATE INDEX role_idx ON CS490_Users(Role);
+
+
+/* Questions, exams, parameters, and answers are most-likely going to be read-heavy and write-heavy so using InnoDB may be better than MyISAM*/
+/*A lot of these use VARCHAR(50) because of uncertainties about length*/
+
+CREATE TABLE Constraints( /*Constraint is a reserved word*/
+  QuestionID INT,
+  `Constraint` ENUM('if/else', 'switch', 'file handling', 'for loop', 'while loop')
+  /*others that can be added: OOP, recursion, program structure, number of variables(ex: swap using only two variables), etc.*/
+)ENGINE=InnoDB;
+
+ALTER TABLE Constraints MODIFY QuestionID INT NOT NULL;
+ALTER TABLE Constraints MODIFY `Constraint` enum('if/else', 'switch', 'file handling', 'for loop', 'while loop') NOT NULL;
+DELETE FROM Constraints WHERE `Constraint` = 'file handling' OR `Constraint` = 'switch';
+ALTER TABLE Constraints MODIFY `Constraint` enum('if/else', 'for loop', 'while loop') NOT NULL;
+ALTER TABLE Constraints ADD INDEX qid(QuestionID);
+
+CREATE TABLE Parameters(
+  paramID INT AUTO_INCREMENT PRIMARY KEY,
+  dataType ENUM('int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'),
+  varName VARCHAR(50),
+  QuestionID INT,
+  FOREIGN KEY(QuestionID) REFERENCES Questions(QuestionID) 
+  ON UPDATE CASCADE 
+  ON DELETE CASCADE
+)ENGINE=InnoDB;
+
+ALTER TABLE Parameters MODIFY dataType enum('int', 'char', 'String','short', 'long', 'float', 'double', 'boolean', 'byte') NOT NULL;
+ALTER TABLE Parameters MODIFY varName varchar(50) NOT NULL;
+ALTER TABLE Parameters MODIFY QuestionID int NOT NULL;
+UPDATE Parameters SET dataType = REPLACE(dataType, 'double', 'float');
+UPDATE arameters SET dataType = REPLACE(dataType, 'char', 'String');
+ALTER TABLE Parameters MODIFY dataType enum('int', 'String', 'short', 'long', 'float', 'boolean', 'byte') NOT NULL;
+UPDATE Parameters SET dataType = REPLACE(dataType, 'long', 'int');
+ALTER TABLE Parameters MODIFY dataType enum('none', 'int', 'String','float', 'boolean') NOT NULL;
+
+
+CREATE TABLE Questions(
+  QuestionID INT AUTO_INCREMENT PRIMARY KEY,
+  `Text` VARCHAR(1024) NOT NULL, /* This can be changed; temporary length used */ /*Text is a reserved word*/
+  Points INT,
+  returnType ENUM('none', 'int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'), /*return type of none means void */
+  functionName VARCHAR(50)
+)ENGINE=InnoDB;
+
+ALTER TABLE Questions MODIFY returnType enum('none', 'int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte') NOT NULL;
+ALTER TABLE Questions MODIFY Points int NOT NULL;
+ALTER TABLE Questions MODIFY functionName varchar(50) NOT NULL;
+UPDATE Questions SET `Text` = REPLACE(`Text`, 'double', 'float');
+UPDATE Questions SET returnType = REPLACE(returnType, 'double', 'float');
+UPDATE Questions SET `Text` = REPLACE(`Text`, 'char', 'one character string'); 
+UPDATE Questions SET returnType = REPLACE(returnType, 'char', 'String');
+ALTER TABLE Questions MODIFY returnType enum('none', 'int', 'String', 'short', 'long', 'float', 'boolean', 'byte') NOT NULL;
+ALTER TABLE Questions ADD Difficulty enum('easy', 'medium', 'hard') NOT NULL;
+UPDATE Questions SET Difficulty = 'hard' WHERE Points >= 15;
+UPDATE Questions SET Difficulty = 'medium' WHERE Points BETWEEN 5 AND 10;
+UPDATE Questions SET `Text` = REPLACE(`Text`, 'long', 'int');
+UPDATE Questions SET returnType = REPLACE(returnType, 'long', 'int');
+UPDATE Questions SET `Text` = REPLACE(`Text`, 'long', 'int'); 
+ALTER TABLE Questions MODIFY returnType enum('none', 'int', 'String','float', 'boolean') NOT NULL;
+
+
+CREATE TABLE Exam(
+  ExamID INT AUTO_INCREMENT PRIMARY KEY,
+  ExamName VARCHAR(50),
+  examStatus ENUM('Active', 'Inactive'), /*It may be better to make an exam inactive rather than delete it; can be changed later*/
+  adminStatus ENUM('Graded', 'Ungraded'), /*may not need this field or one below it */
+  studentStatus ENUM('Attempted', 'Not-attempted')
+)ENGINE=InnoDB;
+
+ALTER TABLE Exam ADD AdminID VARCHAR(10) AFTER  ExamName;
+ALTER TABLE Exam ADD scores enum('Released', 'Not Released') DEFAULT 'Not Released';
+ALTER TABLE Exam MODIFY ExamName VARCHAR(50) UNIQUE;
+ALTER TABLE Exam CHANGE adminStatus GradingStatus enum('Graded', 'Ungraded') DEFAULT 'Ungraded';
+ALTER TABLE Exam MODIFY examStatus enum('Active', 'Inactive') DEFAULT 'Inactive';
+ALTER TABLE Exam DROP COLUMN studentStatus;
+ALTER TABLE Exam MODIFY ExamName VARCHAR(50) NOT NULL;
+
+
+
+CREATE TABLE ExamQuestions(
+  ExamID INT,
+  QuestionID INT
+)ENGINE=InnoDB;
+
+ALTER TABLE ExamQuestions ADD FOREIGN KEY(ExamID) REFERENCES Exam(ExamID) ON UPDATE CASCADE ON DELETE CASCADE;
+
+/*SELECT functionName, `Text`, Points, returnType FROM Questions JOIN
+ * ExamQuestions ON ExamQuestions.QuestionID = Questions.QuestionID JOIN Exam
+ * ON Exam.ExamID = ExamQuestions.ExamID WHERE ExamName = 'sampleExam';
+ */
+
+ /* 
+   SELECT Questions.returnType, Questions.functionName, Questions.Text, Questions.Points, Questions.Difficulty, GROUP_CONCAT(Parameters.dataType), GROUP_CONCAT(DISTINCT
+   Parameters.varName) AS 'parameter names', GROUP_CONCAT(DISTINCT Constraints.Constraint) AS 'Constraint', GROUP_CONCAT(DISTINCT TestCases.Input), GROUP_CONCAT(DISTINCT
+   TestCases.ExpectedOutput) FROM Questions LEFT JOIN Parameters ON Questions.QuestionID = Parameters.QuestionID LEFT JOIN Constraints ON Questions.QuestionID =
+   Constraints.QuestionID LEFT JOIN TestCases ON Questions.QuestionID = TestCases.QuestionID GROUP BY Questions.QuestionID;
+  
+ */
+
+/*
+SELECT functionName, `Text`, Points, returnType,
+GROUP_CONCAT(Parameters.dataType) AS 'Parameter types',
+GROUP_CONCAT(Parameters.varName) AS 'Parameter names',
+GROUP_CONCAT(Constraints.Constraint) AS 'Constraints' FROM Questions JOIN
+ExamQuestions ON ExamQuestions.QuestionID = Questions.QuestionID JOIN Exam ON
+Exam.ExamID = ExamQuestions.ExamID LEFT JOIN Parameters ON
+Parameters.QuestionID = Questions.QuestionID LEFT JOIN Constraints ON
+Constraints.QuestionID = Questions.QuestionID WHERE Exam.ExamName = 'test3'
+GROUP BY ExamQuestions.QuestionID;
+*/
+
+
+/* Question Bank without duplicated parameter types 
+
+SELECT Questions.returnType, Questions.functionName, Questions.Text, Questions.Points, Questions.Difficulty, params.dataTypes, params.varNames, GROUP_CONCAT(DISTINCT
+Constraints.Constraint) AS 'Constraint', GROUP_CONCAT(TestCases.Input), GROUP_CONCAT(TestCases.ExpectedOutput) FROM Questions LEFT JOIN (SELECT QuestionID,
+GROUP_CONCAT(Parameters.dataType) AS 'dataTypes', GROUP_CONCAT(DISTINCT Parameters.varName) AS 'varNames' FROM Parameters GROUP BY Parameters.QuestionID)params ON
+Questions.QuestionID = params.QuestionID LEFT JOIN Constraints ON Questions.QuestionID = Constraints.QuestionID LEFT JOIN TestCases ON Questions.QuestionID =
+TestCases.QuestionID GROUP BY Questions.QuestionID;
+
+
+*/
+
+/*View detailed test feedback and score*/
+/*
+SELECT functionName, `Text`, Points, Questions.returnType, GROUP_CONCAT(Parameters.dataType) AS 'Parameter types', GROUP_CONCAT(Parameters.varName) AS 'Parameter names',
+GROUP_CONCAT(Constraints.Constraint) AS 'Constraints', Answer.Code, Answer.FeedBack, Answer.pointsReceived, Answer.returnType AS 'Correct returnType', Answer.returnValue AS
+'Correct result' FROM Questions JOIN ExamQuestions ON ExamQuestions.QuestionID = Questions.QuestionID JOIN Exam ON Exam.ExamID = ExamQuestions.ExamID JOIN Answer ON
+Answer.ExamID = Exam.ExamID LEFT JOIN Parameters ON Parameters.QuestionID = Questions.QuestionID LEFT JOIN Constraints ON Constraints.QuestionID = Questions.QuestionID WHERE
+Exam.ExamName = 'hi' AND UserID = 'wx411' GROUP BY ExamQuestions.QuestionID;
+*/
+
+/*
+
+SELECT functionName, Points, Questions.returnType, `Parameter types`,`Parameter
+names`, `Constraints`, Answer.Code, Answer.FeedBack, Answer.pointsReceived,
+Answer.returnType AS 'Correct returnType', Answer.returnValue AS 'Correct
+result' FROM Questions JOIN Answer ON Questions.QuestionID = Answer.QuestionID
+JOIN cs490_QuestionInfo ON Questions.QuestionID = cs490_QuestionInfo.QuestionID
+JOIN ExamQuestions ON ExamQuestions.QuestionID = Questions.QuestionID JOIN Exam
+ON Exam.ExamID = ExamQuestions.ExamID WHERE Exam.ExamName = 'test3' AND UserID
+= 'wx411' GROUP BY Questions.QuestionID;
+
+*/
+
+
+
+CREATE TABLE Answer(
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  `Code` VARCHAR(10000), /* Not sure how many characters to store or how code will be stored */ /*Code is a reserved word*/
+  FeedBack VARCHAR(5000), /*Same as comment above */
+  UserID VARCHAR(10),
+  QuestionID INT,
+  ExamID INT,
+  returnType ENUM('none', 'int', 'char', 'String', 'short', 'long', 'float', 'double', 'boolean', 'byte'),
+  returnValue VARCHAR(50),
+  FOREIGN KEY(QuestionID) REFERENCES Questions(QuestionID) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(ExamID) REFERENCES Exam(ExamID) ON UPDATE CASCADE /*ON DELETE CASCADE*/
+)ENGINE=InnoDB;
+
+ALTER TABLE Answer ADD pointsReceived DECIMAL(3, 2) AFTER FeedBack;
+ALTER TABLE Answer MODIFY returnType enum('none', 'int', 'String', 'short', 'long', 'float', 'boolean', 'byte');
+ALTER TABLE Answer MODIFY returnType enum('none', 'int', 'String','float', 'boolean');
+ALTER TABLE Answer MODIFY pointsReceived DECIMAL(5, 2);
+
+
+CREATE TABLE Scores(   
+  ExamID INT NOT NULL,
+  StudentID VARCHAR(10) NOT NULL,
+  TotalPoints INT NOT NULL,
+  Points_Scored DECIMAL(3, 2) NOT NULL,
+  FOREIGN KEY(ExamID) REFERENCES Exam(ExamID)    
+)ENGINE=InnoDB;
+
+ALTER TABLE Scores MODIFY Points_Scored DECIMAL(5, 2)
+
+CREATE TABLE TestCases(
+    QuestionID INT,
+    Input VARCHAR(40),
+    ExpectedOutput VARCHAR(100),
+    FOREIGN KEY(QuestionID) REFERENCES Questions(QuestionID)
+)ENGINE = InnoDB;
+
+ALTER TABLE TestCases ADD CaseID INT PRIMARY KEY AUTO_INCREMENT FIRST;
+
+
+
+
+
+
